@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.gson.JsonObject;
+
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -50,7 +52,7 @@ public class UserRegistration {
 
 		Assert.assertEquals(200, response.statusCode());
 
-		System.out.println(response.statusCode());
+		System.out.println("Status code :" + response.statusCode());
 
 		path = response.jsonPath();
 		respEmail = path.getString("email");
@@ -58,12 +60,10 @@ public class UserRegistration {
 
 		// Getting the JSON Object
 		System.out.println(path.get());
-
-		// Create a request object for login
-		request = RestAssured.given();
-
-		// Add header for login
-		request.header("Content-Type", "application/json");
+		/*
+		 * ---------------------------------------------------------------------
+		 * ---------------------------------------------------------------------
+		 */
 
 		// Parsing and storing value from JSON objectId and ownerId
 		String objectId = path.getString("objectId");
@@ -73,33 +73,40 @@ public class UserRegistration {
 
 		// Adding Request body for User Login Api, email is the response from previous
 		// API
+		request = RestAssured.given();
+		request.header("Content-Type", "application/json");
+		
 		jsonObject.put("email", respEmail);
 		jsonObject.put("password", "password");
 
 		// request.body(jsonObject);
-		response = request.post(RestAssured.baseURI + "/login");
+		Response response = request.post("/login");
 		System.out.println(response.statusCode());
+		Assert.assertEquals(200, response.statusCode());
 		path = response.jsonPath();
 
 		// path.get() : prints the response code after send
 		System.out.println(path.get());
 
-		// Create a request object for user update
-		request = RestAssured.given();
+		/*
+		 * -------------------------------------------------------------------------
+		 * -------------------------------------------------------------------------
+		 */
 
 		// Add header user update
 		request.header("Content-Type", "application/json");
 		request.header("user-token", ownerId);
-		
+
 		// REQUEST BODY
 		jsonObject.put("email", respEmail);
 		jsonObject.put("password", "password");
-		
+
 		// Send REQUEST
-		response = request.put(RestAssured.baseURI + objectId);
+		response = request.put(objectId);
 		System.out.println(response.statusCode());
-		path= response.jsonPath();
-		
+		Assert.assertEquals(200, response.statusCode());
+		path = response.jsonPath();
+
 		System.out.println(path.get());
 
 	}
