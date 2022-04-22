@@ -20,7 +20,7 @@ public class BackendlessAPITesting {
 	JsonPath path;
 
 	String objectId = "A0AAAC06-D753-4532-B014-E6366A5ACFE9";
-	String userToken = "CED34BC4-97A1-45EC-ABA6-3A483811FE25";
+	String userToken ="";
 
 	// Go to BaseURI
 	@Before
@@ -59,7 +59,7 @@ public class BackendlessAPITesting {
 	public void testUpdate() {
 		// Add header user update
 		request.header("Content-Type", "application/json");
-		request.header("user-token", "CED34BC4-97A1-45EC-ABA6-3A483811FE25");
+		request.header("user-token", userToken);
 
 		// REQUEST BODY
 		jsonObject = new JSONObject();
