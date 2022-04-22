@@ -24,7 +24,6 @@ public class UserRegistration {
 	Response response;
 	JsonPath path;
 	String respEmail;
-	String[] loginCred;
 
 	// Go to BaseURI
 	@Before
@@ -75,12 +74,12 @@ public class UserRegistration {
 		// API
 		request = RestAssured.given();
 		request.header("Content-Type", "application/json");
-		
+
 		jsonObject.put("email", respEmail);
 		jsonObject.put("password", "password");
 
-		// request.body(jsonObject);
-		Response response = request.post("/login");
+		request.body(jsonObject);
+		response = request.post(RestAssured.baseURI + "/login");
 		System.out.println(response.statusCode());
 		Assert.assertEquals(200, response.statusCode());
 		path = response.jsonPath();
